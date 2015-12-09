@@ -38,25 +38,15 @@ var options = {
     }
 };
 
-if (process.env.NODE_ENV === "production") {
-    options.entry = {
-        App: appPath
-    };
-    options.plugins.push(
-        new webpack.DefinePlugin({"process.env": {NODE_ENV: JSON.stringify("production")}}),
-        new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin()
-    );
-} else {
-    options.cache = true;
-    options.debug = true;
-    options.devtool = "cheap-module-eval-source-map";
-    options.entry = {
-        App: ["webpack-hot-middleware/client?reload=true", appPath]
-    };
-    options.plugins.push(
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
-    );
-}
+options.cache = true;
+options.debug = true;
+options.devtool = "cheap-module-eval-source-map";
+options.entry = {
+    App: ["webpack-hot-middleware/client?reload=true", appPath]
+};
+options.plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+);
+
 module.exports = options;

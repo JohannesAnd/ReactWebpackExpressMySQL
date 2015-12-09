@@ -8,40 +8,26 @@ var httpProxy = require("http-proxy");
 var proxy = httpProxy.createProxyServer();
 var DevServerPort = 3000;
 
-if (process.env.NODE_ENV !== "production") {
-    var webpack = require("webpack");
-    var webpackDevMiddleware = require("webpack-dev-middleware");
-    var webpackHotMiddleware = require("webpack-hot-middleware");
-    var webpackConfig = require("./webpack.config.js");
-    var compiler = webpack(webpackConfig);
+var webpack = require("webpack");
+var webpackDevMiddleware = require("webpack-dev-middleware");
+var webpackHotMiddleware = require("webpack-hot-middleware");
+var webpackConfig = require("./webpack.config.js");
+var compiler = webpack(webpackConfig);
 
-    app.use(webpackDevMiddleware(compiler, {
-        noInfo: true,
-        publicPath: webpackConfig.output.publicPath
-    }));
-    app.use(webpackHotMiddleware(compiler));
-    app.use(express.static(__dirname + '/public'));
-    // ==== INSERT DEV OVERRIDE ENDPOINTS HERE ==== //
-    // =========================================== //
+app.use(webpackDevMiddleware(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath
+}));
+app.use(webpackHotMiddleware(compiler));
+app.use(express.static(__dirname + '/public'));
 
-    if (process.env.LOCAL) {
-        app.all("*", function goDirectlyToTest(req, res) {
-            "use strict";
-            proxy.web(req, res, {
-                target: "http://localhost:3001",
-                changeOrigin: true
-            });
-        });
-    } else {
-        app.all("*", function goDirectlyToTest(req, res) {
-            "use strict";
-            proxy.web(req, res, {
-                target: "http://test.ducky.no",
-                changeOrigin: true
-            });
-        });
-    }
-}
+app.all("*", function goDirectlyToTest(req, res) {
+    "use strict";
+    proxy.web(req, res, {
+        target: "http://localhost:3001",
+        changeOrigin: true
+    });
+});
 
 proxy.on("error", function errorHandler(error) {
     "use strict";

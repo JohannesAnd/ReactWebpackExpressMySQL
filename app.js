@@ -9,11 +9,8 @@ var app = require('express')(),
     app.use(express.static(__dirname + '/public'))
     app.use(bodyParser.json());
 
-function afterModels() {
     require('./config/express')(app);
     require('./config/routes')(app);
-}
-afterModels();
 
 module.exports = app;
 module.exports.server = server;
