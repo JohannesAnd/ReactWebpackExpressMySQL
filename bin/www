@@ -1,0 +1,22 @@
+var express = require("express");
+var app = require("./../app");
+var defaultPort = 3001;
+
+
+app.listen(defaultPort, function onStarted(){
+    "use-strict";
+    console.log("Server running on port " + defaultPort);
+});
+
+app.get("/", function(req, res){
+    res.send("Hei på deg!");
+});
+
+app.get("/test", function(req, res){
+    res.send("Hei på deg i /test!");
+});
+
+process.on("uncaughtException", function onError(error){
+    "use-strict";
+    console.error(error);
+});
